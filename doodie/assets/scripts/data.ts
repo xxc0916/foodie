@@ -1,9 +1,11 @@
 export let userData = {
-  uid: "" //个人id
+  uid: null //个人id
 };
 
 export let roomData = {
-  vid: "" //房间id
+  vid: null //房间id
 };
 
 export let shopData = [];
+
+export const netUrl = "http://10.180.3.137/";
