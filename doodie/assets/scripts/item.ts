@@ -1,3 +1,6 @@
+import { news } from "./type";
+import { userData } from "./data";
+
 // Learn TypeScript:
 //  - [Chinese] https://docs.cocos.com/creator/manual/zh/scripting/typescript.html
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
@@ -23,15 +26,37 @@ export default class item extends cc.Component {
 
   isChoose = false;
 
-  start() {}
+  id = null;
+  canvas: cc.Node = null;
+  isVote = false; //true 发起投票 false 投票
+  start() {
+    this.canvas = cc.find("Canvas");
+  }
 
-  init(text: string) {
+  init(text: string, id, isVote) {
     this.label.string = text;
+    this.id = id;
+    this.isVote = isVote;
+    if (!this.isVote) {
+      this.canvas.on(news, id => {
+        if (this.id !== id) {
+          this.isChoose = false;
+        }
+        this.updateUI();
+      });
+    }
   }
 
   touch() {
     this.isChoose = !this.isChoose;
+    if (!this.isVote) {
+      userData.sid = this.id;
+      this.canvas.emit(news, this.id);
+    }
+    this.updateUI();
+  }
+  updateUI() {
     this.choose.active = this.isChoose;
-    this.noChoose.active = this.isChoose;
+    this.noChoose.active = !this.isChoose;
   }
 }

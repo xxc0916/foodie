@@ -1,5 +1,6 @@
 export let userData = {
-  uid: null //个人id
+  uid: null, //个人id,
+  sid: null
 };
 
 export let roomData = {
