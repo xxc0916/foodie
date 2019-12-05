@@ -8,7 +8,7 @@ const { ccclass, property } = cc._decorator;
 function sum(m, n) {
   return Math.floor(Math.random() * (m - n) + n);
 }
-
+const key = "hasVote";
 @ccclass
 export default class two extends cc.Component {
   @property(cc.Node)
@@ -36,10 +36,15 @@ export default class two extends cc.Component {
   itemArr: item[] = [];
 
   async start() {
-    // this.gotoVote();
     if (roomData.vid) {
       // 投票逻辑
-      this.gotoVote();
+      const _vid = cc.sys.localStorage.getItem(key);
+      cc.log("-vid", _vid);
+      if (_vid) {
+        this.gotoVoteEnd();
+      } else {
+        this.gotoVote();
+      }
     } else {
       // 发起投票逻辑
       await this.initiateVote();
@@ -50,7 +55,32 @@ export default class two extends cc.Component {
     cc.director.loadScene("start");
   }
 
+  async gotoVoteEnd() {
+    const data: any = await axios.get(
+      netUrl + "votes/" + roomData.vid + "/result"
+    );
+    cc.log("result", data);
+    this.target.removeAllPages();
+    // const shopArr = [
+    //   { name: "111", num: 1 },
+    //   { name: "111", num: 0 },
+    //   { name: "111", num: 2 },
+    //   { name: "111", num: 3 },
+    //   { name: "111", num: 4 },
+    //   { name: "111", num: 5 },
+    //   { name: "111", num: 10 }
+    // ];
+    let shopArr = data.data.datas.shops;
+    shopArr.forEach(element => {
+      const _item = cc.instantiate(this.item);
+      this.target.addPage(_item);
+      _item.getComponent("item").initResult(element.name, element.num);
+      this.itemArr.push(_item.getComponent("item"));
+    });
+  }
+
   async gotoVote() {
+    cc.sys.localStorage.setItem(key, roomData.vid);
     this.button3.active = true;
     this.button4.active = true;
     const shopData: any = await axios.get(netUrl + "votes/" + roomData.vid);
@@ -58,6 +88,7 @@ export default class two extends cc.Component {
     if (shopData && shopData.data) {
       shopArr = shopData.data.datas.shops;
     }
+    this.target.removeAllPages();
     shopArr.forEach(element => {
       const _item = cc.instantiate(this.item);
       this.target.addPage(_item);
@@ -79,6 +110,7 @@ export default class two extends cc.Component {
       vid: roomData.vid,
       sid: userData.sid
     });
+    await this.gotoVoteEnd();
   }
   async getShops() {
     const shopData: any = await axios.get(netUrl + "shops");

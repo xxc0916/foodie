@@ -12,7 +12,13 @@ import { userData } from "./data";
 //  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const { ccclass, property } = cc._decorator;
-
+const color = [
+  new cc.Color(255, 200, 82),
+  new cc.Color(129, 97, 207),
+  new cc.Color(235, 137, 137),
+  new cc.Color(124, 180, 205),
+  new cc.Color(125, 188, 101)
+];
 @ccclass
 export default class item extends cc.Component {
   @property(cc.Label)
@@ -23,6 +29,15 @@ export default class item extends cc.Component {
 
   @property(cc.Node)
   noChoose: cc.Node = null;
+
+  @property(cc.ProgressBar)
+  bar: cc.ProgressBar = null;
+
+  @property(cc.Node)
+  barNode: cc.Node = null;
+
+  @property(cc.Label)
+  pNum: cc.Label = null;
 
   isChoose = false;
 
@@ -47,13 +62,27 @@ export default class item extends cc.Component {
     }
   }
 
+  initResult(text: string, num: number) {
+    this.label.string = text;
+    this.choose.active = false;
+    this.noChoose.active = false;
+    this.bar.node.active = true;
+    this.pNum.node.active = true;
+    this.pNum.string = num.toString() + "人";
+    num > 5 && (num = 5);
+    this.bar.progress = num / 5;
+    num > 0 && (this.barNode.color = color[num - 1]);
+  }
+
   touch() {
-    this.isChoose = !this.isChoose;
-    if (!this.isVote) {
-      userData.sid = this.id;
-      this.canvas.emit(news, this.id);
+    if (!this.bar.node.active) {
+      this.isChoose = !this.isChoose;
+      if (!this.isVote) {
+        userData.sid = this.id;
+        this.canvas.emit(news, this.id);
+      }
+      this.updateUI();
     }
-    this.updateUI();
   }
   updateUI() {
     this.choose.active = this.isChoose;
