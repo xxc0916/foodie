@@ -4,9 +4,10 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class start extends cc.Component {
-  start() {
+  onLoad() {
     const key = "foodId";
     const localId = cc.sys.localStorage.getItem(key);
+    cc.log("localId", localId);
     if (localId) {
       userData.uid = localId;
     } else {

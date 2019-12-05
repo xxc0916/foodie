@@ -29,7 +29,7 @@ export default class item extends cc.Component {
   id = null;
   canvas: cc.Node = null;
   isVote = false; //true 发起投票 false 投票
-  start() {
+  onLoad() {
     this.canvas = cc.find("Canvas");
   }
 
