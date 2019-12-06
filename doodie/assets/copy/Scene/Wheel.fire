@@ -861,7 +861,7 @@
     "duration": 3,
     "acc": 0.1,
     "targetID": 0,
-    "springback": false,
+    "springback": true,
     "effectAudio": {
       "__uuid__": "f23809d1-3b04-4d1d-a8ae-ea7bf0f42cb8"
     },

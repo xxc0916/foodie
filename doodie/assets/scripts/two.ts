@@ -55,7 +55,7 @@ export default class two extends cc.Component {
   }
 
   re() {
-    cc.director.loadScene("start");
+    window.location.href = "https://shard.llssite.com";
   }
 
   async gotoVoteEnd() {
@@ -68,7 +68,7 @@ export default class two extends cc.Component {
     shopArr.forEach(element => {
       const _item = cc.instantiate(this.item);
       this.target.addPage(_item);
-      _item.getComponent("item").initResult(element.name, element.num);
+      _item.getComponent("item").initResult(element.name, element.total);
       this.itemArr.push(_item.getComponent("item"));
     });
   }
@@ -101,7 +101,7 @@ export default class two extends cc.Component {
     this.touchNode.active = true;
     await axios.post(netUrl + "votes/post", {
       uid: userData.uid,
-      vid: roomData.vid,
+      vid: Number(roomData.vid),
       sid: userData.sid
     });
     await this.gotoVoteEnd();
@@ -169,8 +169,8 @@ export default class two extends cc.Component {
 
   share() {
     alert("地址已经复制，请到粘贴到群");
-    // const url = "https://shard.llssite.com/?vid=" + roomData.vid;
-    const url = "http://localhost:7456/?vid=" + roomData.vid;
+    const url = "https://shard.llssite.com/?vid=" + roomData.vid;
+    // const url = "http://localhost:7456/?vid=" + roomData.vid;
     copy(url);
     window.close();
   }
