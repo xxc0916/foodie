@@ -55,13 +55,15 @@ export default class two extends cc.Component {
   }
 
   re() {
-    window.location.href = "https://shard.llssite.com";
+    window.location.href = "http://10.180.3.5:7456/";
   }
 
   async gotoVoteEnd() {
     const data: any = await axios.get(
       netUrl + "votes/" + roomData.vid + "/result"
     );
+    this.button3.active = false;
+    this.button4.active = false;
     cc.log("result", data);
     this.target.removeAllPages();
     let shopArr = data.data.datas.shops;
@@ -163,15 +165,13 @@ export default class two extends cc.Component {
     } else {
       alert("请选择投票选项");
     }
-
-    // alert("地址已经复制，请到粘贴到群");
   }
 
   share() {
-    alert("地址已经复制，请到粘贴到群");
-    const url = "https://shard.llssite.com/?vid=" + roomData.vid;
-    // const url = "http://localhost:7456/?vid=" + roomData.vid;
+    // const url = "https://shard.llssite.com/?vid=" + roomData.vid;
+    const url = "http://10.180.3.5:7456/?vid=" + roomData.vid;
     copy(url);
+    alert("地址已经复制，请到粘贴到群");
     window.close();
   }
 
