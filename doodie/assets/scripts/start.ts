@@ -22,6 +22,9 @@ export default class start extends cc.Component {
     }
   }
 
+  turnOne() {
+    cc.director.loadScene("Wheel");
+  }
   turnTwo() {
     cc.director.loadScene("two");
   }

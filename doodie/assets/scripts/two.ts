@@ -33,6 +33,9 @@ export default class two extends cc.Component {
   @property(cc.Node)
   button4: cc.Node = null;
 
+  @property(cc.Node)
+  shareNode: cc.Node = null;
+
   itemArr: item[] = [];
 
   async start() {
@@ -147,17 +150,29 @@ export default class two extends cc.Component {
       }
     });
     cc.log("arr", arr);
-    const data: any = await axios.post(netUrl + "votes", {
-      uid: userData.uid,
-      subject: "ll",
-      shops: arr
-    });
-    cc.log(data);
-    roomData.vid = data.data.datas.vid;
+    if (arr.length !== 0) {
+      const data: any = await axios.post(netUrl + "votes", {
+        uid: userData.uid,
+        subject: "ll",
+        shops: arr
+      });
+      cc.log(data);
+      roomData.vid = data.data.datas.vid;
+      this.shareNode.active = true;
+      this.confirm.active = false;
+    } else {
+      alert("请选择投票选项");
+    }
+
+    // alert("地址已经复制，请到粘贴到群");
+  }
+
+  share() {
+    alert("地址已经复制，请到粘贴到群");
     // const url = "https://shard.llssite.com/?vid=" + roomData.vid;
     const url = "http://localhost:7456/?vid=" + roomData.vid;
     copy(url);
-    alert("地址已经复制，请到粘贴到群");
+    window.close();
   }
 
   // update (dt) {}
