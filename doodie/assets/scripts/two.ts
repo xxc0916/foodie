@@ -40,7 +40,7 @@ export default class two extends cc.Component {
       // 投票逻辑
       const _vid = cc.sys.localStorage.getItem(key);
       cc.log("-vid", _vid);
-      if (_vid) {
+      if (_vid === roomData.vid) {
         this.gotoVoteEnd();
       } else {
         this.gotoVote();
@@ -61,15 +61,6 @@ export default class two extends cc.Component {
     );
     cc.log("result", data);
     this.target.removeAllPages();
-    // const shopArr = [
-    //   { name: "111", num: 1 },
-    //   { name: "111", num: 0 },
-    //   { name: "111", num: 2 },
-    //   { name: "111", num: 3 },
-    //   { name: "111", num: 4 },
-    //   { name: "111", num: 5 },
-    //   { name: "111", num: 10 }
-    // ];
     let shopArr = data.data.datas.shops;
     shopArr.forEach(element => {
       const _item = cc.instantiate(this.item);
